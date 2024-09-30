@@ -1,0 +1,54 @@
+{
+    "name": "auth-backend-e-comm",
+    "version": "1.0.0",
+    "description": "This is a node project having basic authentication along with e commerce api routes.",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only --no-notify src/index.ts",
+        "build": "tsc",
+        "build:force": "rm -rf ./dist && npm run build",
+        "serve": "tsc src/index.ts && pm2 start dist/index.js",
+        "runbuildonserver": "cross-env NODE_ENV=production node dist/index.js",
+        "runbuildondev": "cross-env NODE_ENV=development node dist/index.js"
+    },
+    "keywords": [
+        "node",
+        "auth",
+        "uniblox",
+        "e-comm"
+    ],
+    "author": "Rishabh Anand",
+    "license": "UNLICENSED",
+    "dependencies": {
+        "axios": "^0.24.0",
+        "bcrypt": "^4.0.1",
+        "compression": "^1.7.4",
+        "config": "^3.3.0",
+        "cors": "^2.8.5",
+        "cross-env": "^7.0.3",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "jsonwebtoken": "^8.5.1",
+        "passport": "^0.4.1",
+        "passport-jwt": "^4.0.0",
+        "ts-node-dev": "^2.0.0",
+        "uuidv4": "^6.1.1",
+        "validate.js": "^0.13.1"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^3.0.0",
+        "@types/config": "0.0.36",
+        "@types/cors": "^2.8.6",
+        "@types/dotenv": "^8.2.0",
+        "@types/express": "^4.17.2",
+        "@types/jsonwebtoken": "^8.3.8",
+        "@types/node": "^13.7.6",
+        "@types/passport": "^1.0.2",
+        "@types/passport-jwt": "^3.0.3",
+        "@types/sequelize": "^4.28.8",
+        "@types/typescript": "^2.0.0",
+        "@types/validator": "^12.0.1",
+        "@types/winston": "^2.4.4",
+        "typescript": "^3.8.3"
+    }
+}

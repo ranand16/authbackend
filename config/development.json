@@ -1,0 +1,6 @@
+{
+    "PORT": 5200,
+    "JWT": {
+        "AUTH_SECRET_KEY": "$dfdf#"
+    }
+}
