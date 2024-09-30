@@ -1,4 +1,5 @@
 import { response } from "express";
+import { PromiseInterface } from "../interfaces";
 
 class StandardResponse {
     private resHeader: any = {
@@ -67,6 +68,52 @@ class StandardResponse {
         }
         res.status(this.resData.status).set(this.resHeader).json(this.resData);
     }
+
+    /**
+     *
+     * @param reason
+     * @todo - we can do logging here. It would single place for all error logging
+     */
+    public reasonHandler(reason: PromiseInterface | Error) {
+        this.error();
+        if (reason instanceof HttpError) {
+            this.set("status", reason.status).set("message", reason.message).setErrorDetails(reason);
+        } else if (reason instanceof Error) {
+            this.set("message", reason.message).setErrorDetails(reason);
+        } else {
+            this.set("status", reason.status).set("message", reason.message);
+            if (reason.errorClassObj) {
+                this.setErrorDetails(reason.errorClassObj);
+            }
+            if (reason?.data) {
+                this.set("data", reason.data)
+            }
+        }
+        return this;
+    }
+
+
+    private setErrorDetails(errorClassObj: Error) {
+        let errorDetails: any = {};
+        if (errorClassObj.message) {
+            errorDetails["ererrorMsg"] = errorClassObj.message;
+        }
+        errorDetails["errorStack"] = errorClassObj.stack;
+        this.set("errorDetails", errorDetails);
+    }
 }
 
 export default StandardResponse;
+
+export class HttpError extends Error {
+    status: number;
+    httpStatus: number;
+    extras: any;
+
+    constructor(message: string, httpStatus: number = 400, extras?: any) {
+        super(message);
+        this.status = httpStatus;
+        this.httpStatus = httpStatus;
+        this.extras = extras;
+    }
+}
