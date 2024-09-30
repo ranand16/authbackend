@@ -22,9 +22,24 @@ Assumptions you can make:
 
 The API’s don’t need a backend store. It can be an in-memory store.
 
+### Config foler
+* This should contain any configurations that needs to be used overall the project for any specific environment.
+* This folder may have a default.json to have default values.
+* To override any values in default.json plus to have environment specific values we need to create development.json or production.json or ... for diff environments like QA or staging
+
+### .env config
+* This should contain any secret configurations that needs to be used overall the project for any specific environment.
+* Check /envLoader.js file to understand the environment file pickup strategy and have .env or .env.example or .env.development or .env.production
+* Even .env.production or ... for diff environments like QA or staging we need to keep in a diff repo or copy environment via FTP
 
 ## Steps to setup in local:
 * npm i 
+* create config/{environment}.json file. Also check if default.json is needed.
+* create .env.{environment}/.env/.env.local and add values from .env.example into it.
+* npm run dev 
 
 
-## Steps after deployment(Will see if time permits)
+## Steps after deployment(Will try to deploy if time permits)
+* config folder needs to have a production.json file (We can create a different repo or use FTP to copy production.json into config folder)
+* .env.production also need to be there. Same method as production.json can be used to have it on server.
+* I would use pm2 to run apps on server

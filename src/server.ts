@@ -2,7 +2,7 @@
  * @author Rishabh Anand
  */
 
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import compression from "compression";
 import cors from "cors";
 import * as bodyParser from "body-parser";
@@ -59,8 +59,27 @@ class Server {
      * Loads aplication routes
      */
     public loadRoutes(): void {
-        const a = Server.app;
-        
+        const app = Server.app;
+        // public routes
+        app.use(express.static("public")); // exposing public route if any 
+        app.all("*", (req, res, next) => next());
+
+        app.use((err: any, req: any, res: any, next: any) => {
+            return new StandardResponse()
+                .error()
+                .set("status", 500)
+                .set("errorMsg", "Oops, something went wrong.") // overridfing the server error message
+                .send(res);
+        });
+
+        app.get(
+            ["/test", "/healthcheck"],
+            (req: Request, res: Response, next: NextFunction) => {
+                console.log("req test route:: ");
+                res.setHeader("Content-Type", "application/json");
+                res.send({ status: 200, message: "It's Success" });
+            }
+        );
     }
 
     /**
