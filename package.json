@@ -32,7 +32,6 @@
         "passport": "^0.4.1",
         "passport-jwt": "^4.0.0",
         "ts-node-dev": "^2.0.0",
-        "uuidv4": "^6.1.1",
         "validate.js": "^0.13.1"
     },
     "devDependencies": {

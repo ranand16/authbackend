@@ -1,6 +1,7 @@
 {
     "PORT": 5200,
     "JWT": {
-        "AUTH_SECRET_KEY": "$dfdf#"
+        "AUTH_SECRET_KEY": "$dfdf#",
+        "AUTH_EXPIRES_IN": "1d"
     }
 }

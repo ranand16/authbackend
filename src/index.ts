@@ -16,8 +16,6 @@ const app = Server.getApp();
  */
 const port = normalizePort(process.env.PORT || Config.get("PORT")); // from env or your env config 
 app.set("port", port);
-console.log("🚀 ~ src/index.ts port:", port);
-
 
 /**
  * Valiadate application port

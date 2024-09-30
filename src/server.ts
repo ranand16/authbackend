@@ -81,6 +81,14 @@ class Server {
                 return new UserController().create(req, res);
             }
         )
+
+        app.post(
+            "/v1/signin",
+            (req: Request, res: Response, next: NextFunction) => {
+                console.log("Signing someone in...");
+                return new UserController().signin(req, res);
+            }
+        )
     }
 
     /**
