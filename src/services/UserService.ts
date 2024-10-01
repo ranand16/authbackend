@@ -5,7 +5,7 @@ import { generateUUID10 } from "../utils/functions";
 import JWT from "jsonwebtoken";
 import Config from "config";
 
-const allUsers = [];
+export const allUsers = [];
 
 
 export default class UserService {
@@ -40,7 +40,8 @@ export default class UserService {
                 username: row.user.username,
                 email: row.user.email,
                 name: row.user.name,
-                password: row.user.password
+                password: row.user.password,
+                is_root: row.user.is_root
             }
 
             // adding this user to allusers array

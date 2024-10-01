@@ -8,6 +8,9 @@ import cors from "cors";
 import * as bodyParser from "body-parser";
 import StandardResponse from "./utils/Response"; 
 import UserController from "./controller/UserController";
+import AuthenticateMiddleware from "./middlewares/AuthenticateMiddleware";
+import passport from "passport";
+import PassportMiddleware from "./middlewares/PassportMiddleware";
 
 class Server {
     public static selfInstance: Server = null;
@@ -89,6 +92,41 @@ class Server {
                 return new UserController().signin(req, res);
             }
         )
+
+        /**
+         * APIS beyond this are authenticate protected
+         */
+        app.use(
+            passport.authenticate("jwt", { session: false }),
+            (req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateAccess(req, res, next)
+        )
+
+        app.post(
+            "/v1/authtest",
+            (req: Request, res: Response, next: NextFunction) => {
+                res.json({ success: true })
+            }
+        )
+
+
+
+
+        /**
+         * APIS beyond this will be only for admin users
+         */
+        app.use(
+            (req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next),
+            
+        )
+
+        app.post(
+            "/v1/roottest",
+            (req: Request, res: Response, next: NextFunction) => {
+                res.json({ success: "YOu're a root user! welcome !" })
+            }
+        )
+
+
     }
 
     /**
@@ -101,6 +139,7 @@ class Server {
         }));
         Server.app.use(bodyParser.json());
         Server.app.use(bodyParser.urlencoded({ extended: true }));
+        new PassportMiddleware(Server.app);
         
         Server.app.options("/*", function (req, res, next) {
             console.log("req.body ------- ",req.body);
