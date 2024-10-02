@@ -8,7 +8,7 @@ export default class CartController {
     }
 
     public addProductToCart(req: any, res: any) {
-        const rowData = { ...req.body, user: req.user , headers: req.headers, ip: req.ip }
+        const rowData = { ...req.body, user: req.user , headers: req.headers }
         this.cartService
             .addProductToCart(rowData)
             .then((updatedCart) => {
@@ -27,7 +27,7 @@ export default class CartController {
 
     public checkoutCart(req: any, res: any) {
         console.log("🚀 ~ CartController ~ checkoutCart ~ req.body:", req.body)
-        const rowData = { ...req.body, user: req.user , headers: req.headers, ip: req.ip }
+        const rowData = { ...req.body, user: req.user, headers: req.headers }
         this.cartService
             .checkoutCart(rowData)
             .then((orderDetails) => {

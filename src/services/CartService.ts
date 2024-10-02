@@ -5,6 +5,7 @@ import { User } from "../models/User";
 
 import { ALL_USERS } from "../utils/constants";
 import { allUsers } from "./UserService";
+import { allDiscountCoupons } from "./DiscountService";
 
 export interface Product {
     id: string; // product id
@@ -14,11 +15,6 @@ export interface Product {
 
 export interface Item extends Product {
     qty: number;
-}
-
-export interface Order {
-    id: string; // order id
-    cart_id: string; // cart id which order is placed
 }
 
 export interface Cart {
@@ -39,6 +35,7 @@ export interface Order {
     discount_code?: string;
     discount?: number;
     bill: number;
+    timestamp: number;
 }
 
 export const allCarts = {};
@@ -106,30 +103,68 @@ export default class CartService {
             const filcarts: Cart[] = userCarts.filter(c => c.id === cart_id);
             const cart = filcarts[0];
 
-            if(!(cart && cart.id) && cart.items.length < 1) {
+            let discount_applied: boolean = false;
+            let discount_code;
+            let discount: number = 0;
+            
+            if(!(cart && cart.id) && cart?.items && cart?.items?.length < 1) {
                 return this.throwValidationError("No items found in cart. Checkout incomplete!!")
             }
+            let bill = cart.total_cost;
 
-            // let last_discountOrder: Order;
-            // userOrders.map((o: Order, i) => {
-            //     last_discountOrder = o;
-            // });
-            // const last_discount_index = userOrders.lastIndexOf(last_discountOrder);
-            // console.log("🚀 ~ CartService ~ checkoutCart ~ last_discount_index:", last_discount_index)
+            // BY DEFAULT I WILL PICK UP ALWAYS the first DISCOUNT COUPON
+            // fetch discount codes and check if there is any discount code in the db
+            const allDiscounts = Object.values(allDiscountCoupons);
+            if(allDiscounts.length > 0) {
+                console.log("🚀 ~ CartService ~ checkoutCart ~ allDiscountCoupons:", allDiscountCoupons);
+                const discountObj = allDiscounts[0]; // BY DEFAULT I WILL PICK UP ALWAYS the first DISCOUNT COUPON
+                const dis_id = discountObj["id"];
+                const dis_code = discountObj["code"];
+                const dis_startfrom = discountObj["startfrom"];
+                const dis_nthrepeat = discountObj["nthrepeat"];
 
-            // check if this is the nth order
-            // if(userOrders.)
+                const ordersAfterDiscountStart = userOrders.filter((uo) => uo.timestamp >= dis_startfrom);
+                const latestDiscountOrder = ordersAfterDiscountStart
+                    .filter(uo => uo.discount_applied)
+                    .reduce((latest, current) => {
+                        return (current.timestamp > latest.timestamp) ? current : latest;
+                    }, { timestamp: 0 });
+                // Filter orders that come after the latest discount was applied
+                const noDiscountOrders = ordersAfterDiscountStart.filter(order => order.timestamp > latestDiscountOrder.timestamp);
+
+
+                // There are 2 cases, both has same code to be applied but different condition needs to be checked 
+                // case 1. if discount code will be applied for the 1st time 
+                // if order has no discount applied before 
+                // check the number of orders done after the discount code was created
+
+                // case 2. if discount code will be applied after 1st time
+                // check number of orders done after the previous discount applied order                
+                // Check if the count of non-discounted orders is a multiple of nthrepeat
+                if((ordersAfterDiscountStart.length + 1 === dis_nthrepeat) || (noDiscountOrders.length > 0 && (noDiscountOrders.length + 1) % dis_nthrepeat === 0)) { // this is the first nth order for this person
+                    discount_applied = true;
+                    discount_code = dis_code;
+                    discount = cart.total_cost * 0.1; // 10% discount, this can also be added to discount creation flow 
+                    bill = bill - discount;
+                }
+
+                
+                
+            }
 
             let newOrder: Order;
             newOrder = {
                 id: generateUUID10().toString(),
                 cart_id: cart.id,
                 user_id: cart.user_id,
-                cart: cart,
                 currency: "rs",
                 total_amount: cart.total_cost,
-                bill: cart.total_cost,
-                discount_applied: false
+                bill: bill,
+                timestamp: Date.now(),
+                discount_applied: discount_applied,
+                discount: discount,
+                discount_code: discount_code,
+                cart: cart,
             }
             allUsers[cart.user_id]["orders"] = [...allUsers[cart.user_id]["orders"], newOrder];
 

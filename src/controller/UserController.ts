@@ -8,7 +8,7 @@ export default class UserController {
     }
 
     public create(req: any, res: any) {
-        const rowData = { ...req.body, headers: req.headers, ip: req.ip, user: req.body.user, type: req.body.type}
+        const rowData = { ...req.body, headers: req.headers}
         this.userService
             .create(rowData)
             .then((user) => {
@@ -26,7 +26,7 @@ export default class UserController {
     }
 
     public signin(req: any, res: any) {
-        const rowData = { ...req.body, headers: req.headers, ip: req.ip, user: req.body.user, type: req.body.type}
+        const rowData = { ...req.body, headers: req.headers }
         this.userService
             .signin(rowData)
             .then((user) => {

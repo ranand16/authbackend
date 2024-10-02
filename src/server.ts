@@ -12,6 +12,7 @@ import AuthenticateMiddleware from "./middlewares/AuthenticateMiddleware";
 import passport from "passport";
 import PassportMiddleware from "./middlewares/PassportMiddleware";
 import CartController from "./controller/CartController";
+import DiscountController from "./controller/DiscountController";
 
 class Server {
     public static selfInstance: Server = null;
@@ -91,17 +92,7 @@ class Server {
                 console.log("Signing someone in...");
                 return new UserController().signin(req, res);
             }
-        )
-
-        app.post(
-            "/v1/allUsers",
-            (req: Request, res: Response, next: NextFunction) => {
-                console.log("Getting all users data...");
-                return new UserController().getAllUsers(req, res);
-            }
-        )
-
-        
+        )        
 
         /**
          * APIS beyond this are authenticate protected
@@ -150,9 +141,7 @@ class Server {
          */
         app.post(
             "/v1/admin/discount/generate",
-            (req: Request, res: Response) => {
-                res.json({ success: "This is a new discount code!" })
-            }
+            (req: Request, res: Response) => new DiscountController().createDiscountCoupon(req, res)
         )
 
         app.post(
@@ -161,6 +150,20 @@ class Server {
                 res.json({ success: "This is discount analytics!" })
             }
         )
+
+        app.post(
+            "/v1/allUsers",
+            (req: Request, res: Response, next: NextFunction) => {
+                console.log("Getting all users data...");
+                return new UserController().getAllUsers(req, res);
+            }
+        )
+
+        app.post(
+            "/v1/admin/discount/coupons",
+            (req: Request, res: Response) => new DiscountController().getAllDiscountCoupons(req, res)
+        )
+
     }
 
     /**
