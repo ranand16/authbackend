@@ -4,14 +4,16 @@ import { User } from "../models/User";
 import { generateUUID10 } from "../utils/functions";
 import JWT from "jsonwebtoken";
 import Config from "config";
-
-export const allUsers = [];
-
+export const allUsers = {};
 
 export default class UserService {
     loggedInUser: User;
     constructor() {
         
+    }
+
+    public getAllUsers() {
+        return this.promiseResolve(allUsers);
     }
 
     public async create(row: any) {
@@ -23,7 +25,7 @@ export default class UserService {
             if(!(row.user.username && row.user.password)) this.throwValidationError("Username/Password not found in payload")
             
             // Check user with same username exists
-            const filterUser = allUsers.filter((user)=>{
+            const filterUser = Object.values(allUsers).filter((user: User)=>{
                 const reqUser = row.user;
                 if(reqUser.username === user.username) return user
             })
@@ -34,18 +36,22 @@ export default class UserService {
                 // do encryption or anything with the password 
             }
 
+            // Do any DATA SANITIZATION / CHECKS / VALIDATION here like any specific data validations etc..
+            // FOR NOW I'm considering mostly happy paths and CRICTICAL scenarios only 
+
+            const newUserId = generateUUID10().toString()
             // Insert user in the users object  
             const newuser: User = {
-                id: generateUUID10(),
+                id: newUserId,
                 username: row.user.username,
                 email: row.user.email,
                 name: row.user.name,
                 password: row.user.password,
-                is_root: row.user.is_root
+                is_root: row.user.is_root,
+                carts: [],
+                orders: []
             }
-
-            // adding this user to allusers array
-            allUsers.push(newuser);
+            allUsers[newUserId] = newuser;
             // response
             return this.promiseResolve(newuser);
         } catch(e) {
@@ -61,10 +67,10 @@ export default class UserService {
             if(!(row.user.username && row.user.password)) this.throwValidationError("Username/Password not found in payload")
 
             // Check if the username exists             
-            const filterUser: User[] = allUsers.filter((user)=>{
+            const filterUser: User[] = Object.values(allUsers).filter((user: User)=>{
                 const reqUser = row.user;
                 if(reqUser.username === user.username) return user
-            })
+            }) as User[]
             if(filterUser.length < 1) this.throwValidationError("Username not found in records, Please signup!!");
             
             // Check if the username has this password

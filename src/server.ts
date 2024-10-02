@@ -11,6 +11,7 @@ import UserController from "./controller/UserController";
 import AuthenticateMiddleware from "./middlewares/AuthenticateMiddleware";
 import passport from "passport";
 import PassportMiddleware from "./middlewares/PassportMiddleware";
+import CartController from "./controller/CartController";
 
 class Server {
     public static selfInstance: Server = null;
@@ -71,7 +72,6 @@ class Server {
         app.get(
             ["/test", "/healthcheck"],
             (req: Request, res: Response, next: NextFunction) => {
-                console.log("req test route:: ");
                 res.setHeader("Content-Type", "application/json");
                 res.send({ status: 200, message: "It's Success" });
             }
@@ -93,6 +93,16 @@ class Server {
             }
         )
 
+        app.post(
+            "/v1/allUsers",
+            (req: Request, res: Response, next: NextFunction) => {
+                console.log("Getting all users data...");
+                return new UserController().getAllUsers(req, res);
+            }
+        )
+
+        
+
         /**
          * APIS beyond this are authenticate protected
          */
@@ -109,24 +119,48 @@ class Server {
         )
 
 
+        /**
+         * Adds new items to the cart id for partiucluar user 
+         */
 
+        app.post(
+            "/v1/cart/addToCart",
+            (req: Request, res: Response) => new CartController().addProductToCart(req, res)
+        )
+
+        app.post(
+            "/v1/cart/checkoutCart",
+            (req: Request, res: Response) => new CartController().checkoutCart(req, res)
+        )
 
         /**
          * APIS beyond this will be only for admin users
          */
-        app.use(
-            (req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next),
-            
-        )
+        app.use((req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next))
 
         app.post(
             "/v1/roottest",
             (req: Request, res: Response, next: NextFunction) => {
-                res.json({ success: "YOu're a root user! welcome !" })
+                res.json({ success: "You're a root user! welcome !" })
             }
         )
 
+        /**
+         * Add new discount code, currently will add to the 
+         */
+        app.post(
+            "/v1/admin/discount/generate",
+            (req: Request, res: Response) => {
+                res.json({ success: "This is a new discount code!" })
+            }
+        )
 
+        app.post(
+            "/v1/admin/discount/analytics",
+            (req: Request, res: Response) => {
+                res.json({ success: "This is discount analytics!" })
+            }
+        )
     }
 
     /**
@@ -142,7 +176,6 @@ class Server {
         new PassportMiddleware(Server.app);
         
         Server.app.options("/*", function (req, res, next) {
-            console.log("req.body ------- ",req.body);
             res.header("Access-Control-Allow-Origin", "*");
             res.header(
                 "Access-Control-Allow-Methods",

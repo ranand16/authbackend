@@ -5,7 +5,6 @@ import Config from "config";
 import { AuthInfoI } from "../utils/Auth";
 import { User } from "../models/User";
 import { allUsers } from "../services/UserService";
-
 export default class PassportMiddleware {
     constructor(app: any) {
         app.use(
@@ -30,9 +29,7 @@ export default class PassportMiddleware {
                     secretOrKey: Config.get("JWT.AUTH_SECRET_KEY")
                 },
                 function (jwtPayload: AuthInfoI, done) {
-                    console.log("🚀 ~ PassportMiddleware ~ setStrategy ~ jwtPayload:", jwtPayload)
-                    const thisuserArr = allUsers.filter((user: User)=> {
-                        console.log(user.id, " --- ",  jwtPayload.id);
+                    const thisuserArr = Object.values(allUsers).filter((user: User)=> {
                         return user.id === jwtPayload.id
                     })
                     const thisuser = thisuserArr[0];

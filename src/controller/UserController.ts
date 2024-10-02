@@ -18,7 +18,6 @@ export default class UserController {
                     .send(res);
             })
             .catch((e)=> {
-                console.log("🚀 ~ UserController ~ create ~ e:", e)
                 return new StandardResponse()
                     .reasonHandler(e)
                     .send(res);
@@ -37,12 +36,24 @@ export default class UserController {
                     .send(res);
             })
             .catch((e)=> {
-                console.log("🚀 ~ UserController ~ create ~ e:", e)
                 return new StandardResponse()
                     .reasonHandler(e)
                     .send(res);
             })
         
+    }
+
+    public getAllUsers(req: any, res: any) {
+        this.userService.getAllUsers().then((allUsers)=>{
+            return new StandardResponse()
+                .success()
+                .set("data", allUsers)
+                .send(res)
+        }).catch((e)=> {
+            return new StandardResponse()
+                .reasonHandler(e)
+                .send(res);
+        })
     }
 
 }
