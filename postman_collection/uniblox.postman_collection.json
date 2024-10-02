@@ -1,0 +1,250 @@
+{
+	"info": {
+		"_postman_id": "aef1fa6a-6616-4431-b789-ceaa3b464b80",
+		"name": "uniblox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "1009715"
+	},
+	"item": [
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": {\n        \"username\": \"aranand166\",\n        \"password\": \"123\",\n        \"is_root\": true\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5200/v1/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "signin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": {\n        \"username\": \"aranand166\",\n        \"password\": \"123\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5200/v1/signin"
+			},
+			"response": []
+		},
+		{
+			"name": "Authtest",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:5200/v1/authtest"
+			},
+			"response": []
+		},
+		{
+			"name": "addtocart",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cart\": {\n        \"items\": [\n            {\n                \"id\": \"120\",\n                \"cost\": 5,\n                \"currency\": \"rs\",\n                \"qty\": 3\n            },\n            {\n                \"id\": \"121\",\n                \"cost\": 5,\n                \"currency\": \"rs\",\n                \"qty\": 3\n            },\n            {\n                \"id\": \"122\",\n                \"cost\": 5,\n                \"currency\": \"rs\",\n                \"qty\": 3\n            },\n            {\n                \"id\": \"123\",\n                \"cost\": 5,\n                \"currency\": \"rs\",\n                \"qty\": 3\n            },\n            {\n                \"id\": \"124\",\n                \"cost\": 5,\n                \"currency\": \"rs\",\n                \"qty\": 3\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5200/v1/cart/addToCart"
+			},
+			"response": []
+		},
+		{
+			"name": "addtocart_existing",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cart\": {\n        \"id\":\"2707441877\",\n        \"items\": [\n            {\n                \"id\": \"128\",\n                \"cost\": 12,\n                \"currency\": \"rs\",\n                \"qty\": 3\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5200/v1/cart/addToCart"
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUsers",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cart\": {\n        \"id\":\"5996854660\",\n        \"items\": [\n            {\n                \"id\": \"125\",\n                \"cost\": 5,\n                \"currency\": \"rs\",\n                \"qty\": 3\n            }\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5200/v1/allUsers"
+			},
+			"response": []
+		},
+		{
+			"name": "getAllDiscountCoupons",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5200/v1/admin/discount/coupons"
+			},
+			"response": []
+		},
+		{
+			"name": "checkout",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cart_id\":\"6504608029\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5200/v1/cart/checkoutCart"
+			},
+			"response": []
+		},
+		{
+			"name": "discount_create",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"repeat_n\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5200/v1/admin/discount/generate"
+			},
+			"response": []
+		},
+		{
+			"name": "ROOTtest",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{bearer}}",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:5200/v1/roottest"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "bearer",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTI1MjA2MjI5MiwidXNlcm5hbWUiOiJhcmFuYW5kMTY2IiwicGFzc3dvcmQiOiIxMjMiLCJpYXQiOjE3Mjc3NTQyNTgsImV4cCI6MTcyNzg0MDY1OH0.kDqXhOBk7zwHG5tPMH9q48rzm4rEskEESvkS7o9u4fU"
+		}
+	]
+}

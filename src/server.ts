@@ -136,9 +136,6 @@ class Server {
             }
         )
 
-        /**
-         * Add new discount code, currently will add to the 
-         */
         app.post(
             "/v1/admin/discount/generate",
             (req: Request, res: Response) => new DiscountController().createDiscountCoupon(req, res)

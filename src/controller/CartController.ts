@@ -26,7 +26,6 @@ export default class CartController {
     }
 
     public checkoutCart(req: any, res: any) {
-        console.log("🚀 ~ CartController ~ checkoutCart ~ req.body:", req.body)
         const rowData = { ...req.body, user: req.user, headers: req.headers }
         this.cartService
             .checkoutCart(rowData)
