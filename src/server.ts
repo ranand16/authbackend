@@ -13,6 +13,7 @@ import passport from "passport";
 import PassportMiddleware from "./middlewares/PassportMiddleware";
 import CartController from "./controller/CartController";
 import DiscountController from "./controller/DiscountController";
+import data from '../config/products.json';
 
 class Server {
     public static selfInstance: Server = null;
@@ -71,7 +72,7 @@ class Server {
         app.all("*", (req, res, next) => next());
 
         app.get(
-            ["/test", "/healthcheck"],
+            ["/","/test", "/healthcheck"],
             (req: Request, res: Response, next: NextFunction) => {
                 res.setHeader("Content-Type", "application/json");
                 res.send({ status: 200, message: "It's Success" });
@@ -92,7 +93,7 @@ class Server {
                 console.log("Signing someone in...");
                 return new UserController().signin(req, res);
             }
-        )        
+        )
 
         /**
          * APIS beyond this are authenticate protected
@@ -109,6 +110,13 @@ class Server {
             }
         )
 
+        app.get(
+            "/v1/productlist",
+            (req: Request, res: Response, next: NextFunction) => {
+                res.header("Content-Type",'application/json');
+                res.send(JSON.stringify(data));
+            }
+        )
 
         /**
          * Adds new items to the cart id for partiucluar user 
@@ -127,10 +135,10 @@ class Server {
         /**
          * APIS beyond this will be only for admin users
          */
-        app.use((req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next))
 
         app.post(
             "/v1/roottest",
+            (req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next),
             (req: Request, res: Response, next: NextFunction) => {
                 res.json({ success: "You're a root user! welcome !" })
             }
@@ -138,11 +146,13 @@ class Server {
 
         app.post(
             "/v1/admin/discount/generate",
+            (req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next),
             (req: Request, res: Response) => new DiscountController().createDiscountCoupon(req, res)
         )
 
         app.post(
             "/v1/admin/discount/analytics",
+            (req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next),
             (req: Request, res: Response) => {
                 res.json({ success: "This is discount analytics!" })
             }
@@ -150,6 +160,7 @@ class Server {
 
         app.post(
             "/v1/allUsers",
+            (req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next),
             (req: Request, res: Response, next: NextFunction) => {
                 console.log("Getting all users data...");
                 return new UserController().getAllUsers(req, res);
@@ -158,6 +169,7 @@ class Server {
 
         app.post(
             "/v1/admin/discount/coupons",
+            (req: Request, res: Response, next: NextFunction) => AuthenticateMiddleware.validateRootAccess(req, res, next),
             (req: Request, res: Response) => new DiscountController().getAllDiscountCoupons(req, res)
         )
 

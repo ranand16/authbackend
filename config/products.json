@@ -1,0 +1,40 @@
+{
+    "products": [
+        {
+            "id": "120",
+            "cost": 5,
+            "currency": "rs",
+            "image": "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg"
+        },
+        {
+            "id": "121",
+            "cost": 5,
+            "currency": "rs",
+            "image": "https://images.pexels.com/photos/335257/pexels-photo-335257.jpeg"
+        },
+        {
+            "id": "122",
+            "cost": 5,
+            "currency": "rs",
+            "image": "https://images.pexels.com/photos/3270223/pexels-photo-3270223.jpeg"
+        },
+        {
+            "id": "123",
+            "cost": 5,
+            "currency": "rs",
+            "image": "https://images.pexels.com/photos/1738641/pexels-photo-1738641.jpeg"
+        },
+        {
+            "id": "124",
+            "cost": 5,
+            "currency": "rs",
+            "image": "https://images.pexels.com/photos/3907507/pexels-photo-3907507.jpeg"
+        },
+        {
+            "id": "125",
+            "cost": 5,
+            "currency": "rs",
+            "image": "https://images.pexels.com/photos/279480/pexels-photo-279480.jpeg"
+        }
+    ]
+}

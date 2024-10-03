@@ -11,7 +11,7 @@ export default class PassportMiddleware {
             passport.initialize(),
             (req: Request, res: Response, next: NextFunction) => {
                 res.on("finish", () => {
-                    console.log("Auth user:: done!");
+                    // do something if yu want
                 })
                 next();
             }
